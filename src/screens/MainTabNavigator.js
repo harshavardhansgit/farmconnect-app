@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text } from "react-native";
 import HomeScreen from "../screens/HomeScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import CartScreen from "../screens/CartScreen";
+import OrderHistoryScreen from "./OrderHistoryScreen";
 
 // Temporary placeholder screens
 function CategoriesScreen() {
@@ -25,14 +27,6 @@ function ProfileScreen() {
     return (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
             <Text>Profile Screen</Text>
-        </View>
-    );
-}
-
-function CartScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text>Cart Screen</Text>
         </View>
     );
 }
@@ -72,7 +66,7 @@ export default function MainTabNavigator() {
             <Tab.Screen name="Categories" component={CategoriesScreen} />
             <Tab.Screen name="Search" component={SearchScreen} />
             <Tab.Screen name="Cart" component={CartScreen} />
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="Profile" component={OrderHistoryScreen} />
         </Tab.Navigator>
     );
 }
