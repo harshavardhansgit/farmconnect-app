@@ -1,9 +1,46 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 import { TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProductDetailsScreen({ route }) {
     const { product } = route.params;
+    const handleAddToCart = async () => {
+        try {
+            // 1. Get existing cart
+            const storedCart = await AsyncStorage.getItem("cart");
+            let cart = storedCart ? JSON.parse(storedCart) : [];
+
+            // 2. Check if product already exists
+            const existingIndex = cart.findIndex(
+                (item) => item.id === product.id
+            );
+
+            if (existingIndex !== -1) {
+                // Product exists → increase quantity
+                cart[existingIndex].qty += 1;
+            } else {
+                // New product → add with qty = 1
+                cart.push({
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    unit: product.unit,
+                    image_url: product.image_url,
+                    qty: 1,
+                });
+            }
+
+            // 3. Save updated cart
+            await AsyncStorage.setItem("cart", JSON.stringify(cart));
+
+            alert("Added to cart 🛒");
+        } catch (error) {
+            console.log("Add to cart error:", error);
+            alert("Failed to add to cart");
+        }
+    };
+
 
     return (
         <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
@@ -42,6 +79,7 @@ export default function ProductDetailsScreen({ route }) {
             </Text>
 
             <TouchableOpacity
+                onPress={handleAddToCart}
                 style={{
                     backgroundColor: "#2E7D32",
                     paddingVertical: 14,
