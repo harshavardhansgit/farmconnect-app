@@ -6,6 +6,7 @@ import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
 import MainTabNavigator from "../screens/MainTabNavigator";
 import ProductDetailsScreen from "../screens/ProductDetailsScreen";
+import OrderDetailsScreen from "../screens/OrderDetailsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,11 @@ export default function AppNavigator() {
                     name="ProductDetails"
                     component={ProductDetailsScreen}
                     options={{ title: "Product Details" }}
+                />
+                <Stack.Screen
+                    name="OrderDetails"
+                    component={OrderDetailsScreen}
+                    options={{ title: "Order Details" }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
