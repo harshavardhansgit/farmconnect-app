@@ -58,7 +58,7 @@ export default function CartScreen() {
             };
 
             // 3. Call backend
-            const response = await fetch("http://192.168.1.55:5000/orders", {
+            const response = await fetch("http://192.168.1.58:5000/orders", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

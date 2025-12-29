@@ -12,7 +12,7 @@ export default function OrderDetailsScreen({ route }) {
       const token = await AsyncStorage.getItem("token");
 
       const response = await fetch(
-        `http://192.168.1.55:5000/orders/${orderId}`,
+        `http://192.168.1.58:5000/orders/${orderId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

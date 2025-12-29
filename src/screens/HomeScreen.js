@@ -52,7 +52,7 @@ export default function HomeScreen({ navigation }) {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://192.168.1.55:5000/products");
+        const response = await fetch("http://192.168.1.58:5000/products");
         const data = await response.json();
         setProducts(data);
         setFilteredProducts(data);
@@ -78,8 +78,19 @@ export default function HomeScreen({ navigation }) {
     }
   }, [selectedCategory, products]);
 
+  if (loadingProducts) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Ionicons name="leaf" size={40} color="#2E7D32" />
+        <Text style={{ marginTop: 10, color: "#777" }}>
+          Loading fresh products...
+        </Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+    <View style={{ flex: 1, backgroundColor: "#F4F6F8" }}>
 
       {/* TOP BAR */}
       <View
@@ -88,7 +99,8 @@ export default function HomeScreen({ navigation }) {
           alignItems: "center",
           justifyContent: "space-between",
           paddingHorizontal: 20,
-          paddingVertical: 40,
+          paddingTop: 40,
+          paddingBottom: 16,
           backgroundColor: "#ffffff",
           borderBottomWidth: 1,
           borderBottomColor: "#eee",
@@ -142,6 +154,10 @@ export default function HomeScreen({ navigation }) {
                   backgroundColor: isSelected ? "#2E7D32" : "#E8F5E9",
                   borderRadius: 20,
                   marginRight: 10,
+                  shadowColor: "#000",
+                  shadowOpacity: 0.08,
+                  shadowRadius: 6,
+                  elevation: 2,
                 }}
               >
                 <Text
@@ -156,42 +172,42 @@ export default function HomeScreen({ navigation }) {
             );
           })}
         </ScrollView>
-      </View>
 
-      {/* CAROUSEL */}
-      <View style={{ marginTop: 20 }}>
-        <ScrollView
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 20 }}
-        >
-          {banners.map((item) => (
-            <View
-              key={item.id}
-              style={{
-                width: 350,
-                height: 150,
-                backgroundColor: item.color,
-                borderRadius: 12,
-                marginRight: 15,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
+        {/* CAROUSEL */}
+        <View style={{ marginTop: 20 }}>
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 20 }}
+          >
+            {banners.map((item) => (
+              <View
+                key={item.id}
                 style={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  color: "#2E7D32",
-                  textAlign: "center",
+                  width: 350,
+                  height: 150,
+                  backgroundColor: item.color,
+                  borderRadius: 12,
+                  marginRight: 15,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                {item.title}
-              </Text>
-            </View>
-          ))}
-        </ScrollView>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    color: "#2E7D32",
+                    textAlign: "center",
+                  }}
+                >
+                  {item.title}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
       </View>
 
       {/* PRODUCTS GRID */}
@@ -213,8 +229,8 @@ export default function HomeScreen({ navigation }) {
               }
               style={{
                 backgroundColor: "#fff",
-                borderRadius: 12,
-                padding: 10,
+                borderRadius: 14,
+                padding: 12,
                 marginBottom: 15,
                 width: "48%",
                 shadowColor: "#000",
@@ -229,8 +245,8 @@ export default function HomeScreen({ navigation }) {
                 style={{
                   height: 100,
                   width: "100%",
-                  borderRadius: 8,
-                  marginBottom: 8,
+                  borderTopLeftRadius: 14,
+                  borderTopRightRadius: 14,
                 }}
                 resizeMode="cover"
               />
@@ -242,16 +258,20 @@ export default function HomeScreen({ navigation }) {
                 {item.category}
               </Text>
 
-              <Text style={{ color: "#2E7D32", marginTop: 4 }}>
+              <Text
+                style={{
+                  color: "#2E7D32",
+                  marginTop: 6,
+                  fontWeight: "700",
+                  fontSize: 15,
+                }}
+              >
                 ₹{item.price} / {item.unit}
               </Text>
             </TouchableOpacity>
           )}
         />
       </View>
-
-
-
     </View>
   );
 }

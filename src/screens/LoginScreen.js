@@ -31,7 +31,7 @@ export default function LoginScreen({ navigation }) {
 
         try {
             // 1. CALL BACKEND API
-            const response = await fetch("http://192.168.1.55:5000/auth/login", {
+            const response = await fetch("http://192.168.1.58:5000/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

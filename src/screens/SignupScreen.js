@@ -38,7 +38,7 @@ export default function SignupScreen({ navigation }) {
         setLoading(true);
 
         try {
-            const response = await fetch("http://192.168.1.55:5000/auth/signup", {
+            const response = await fetch("http://192.168.1.58:5000/auth/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

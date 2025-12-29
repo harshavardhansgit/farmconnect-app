@@ -9,7 +9,7 @@ export default function OrderHistoryScreen({ navigation }) {
         const fetchOrders = async () => {
             const token = await AsyncStorage.getItem("token");
 
-            const response = await fetch("http://192.168.1.55:5000/orders", {
+            const response = await fetch("http://192.168.1.58:5000/orders", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
