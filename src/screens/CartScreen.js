@@ -84,8 +84,41 @@ export default function CartScreen() {
             alert("Something went wrong");
         }
     };
+    if (cartItems.length === 0) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#F4F6F8",
+                    padding: 20,
+                }}
+            >
+                <Text style={{ fontSize: 48 }}>🛒</Text>
 
+                <Text
+                    style={{
+                        fontSize: 18,
+                        fontWeight: "600",
+                        marginTop: 16,
+                    }}
+                >
+                    Your cart is empty
+                </Text>
 
+                <Text
+                    style={{
+                        color: "#777",
+                        marginTop: 6,
+                        textAlign: "center",
+                    }}
+                >
+                    Add fresh farm products to place an order
+                </Text>
+            </View>
+        );
+    }
 
     return (
         <View style={{ flex: 1, padding: 20, top: 30, marginBottom: 25, backgroundColor: "#fff" }}>
@@ -104,6 +137,10 @@ export default function CartScreen() {
                             padding: 10,
                             backgroundColor: "#f9f9f9",
                             borderRadius: 10,
+                            shadowColor: "#131313d5",
+                            shadowOpacity: 0.06,
+                            shadowRadius: 4,
+                            elevation: 3,
                         }}
                     >
                         <Image
@@ -112,11 +149,11 @@ export default function CartScreen() {
                         />
 
                         <View style={{ marginLeft: 12, flex: 1 }}>
-                            <Text style={{ fontSize: 16, fontWeight: "600" }}>
+                            <Text style={{ fontSize: 15, fontWeight: "600" }}>
                                 {item.title}
                             </Text>
 
-                            <Text style={{ color: "#777", marginVertical: 4 }}>
+                            <Text style={{ marginTop: 4,color: "#2E7D32", marginVertical: 4 }}>
                                 ₹{item.price} / {item.unit}
                             </Text>
 
@@ -182,7 +219,6 @@ export default function CartScreen() {
                     Place Order
                 </Text>
             </TouchableOpacity>
-
         </View>
     );
 }
