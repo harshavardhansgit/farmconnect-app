@@ -5,6 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export default function CartScreen() {
     const [cartItems, setCartItems] = useState([]);
+    const [placingOrder, setPlacingOrder] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -42,46 +43,41 @@ export default function CartScreen() {
     };
 
     const placeOrder = async () => {
+        if (placingOrder) return; // prevent double tap
+
         try {
-            // 1. Get auth token
+            setPlacingOrder(true);
+
             const token = await AsyncStorage.getItem("token");
 
-            if (!token) {
-                alert("Please login again");
-                return;
-            }
-
-            // 2. Prepare order payload
-            const orderPayload = {
-                items: cartItems,
-                total: totalAmount,
-            };
-
-            // 3. Call backend
             const response = await fetch("http://192.168.1.58:5000/orders", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(orderPayload),
+                body: JSON.stringify({
+                    items: cartItems,
+                    total: totalAmount,
+                }),
             });
 
             const data = await response.json();
 
             if (!response.ok) {
                 alert(data.error || "Order failed");
+                setPlacingOrder(false);
                 return;
             }
 
-            // 4. Clear cart
             await AsyncStorage.removeItem("cart");
             setCartItems([]);
 
             alert("Order placed successfully 🎉");
         } catch (error) {
-            console.log("Order error:", error);
             alert("Something went wrong");
+        } finally {
+            setPlacingOrder(false);
         }
     };
     if (cartItems.length === 0) {
@@ -121,14 +117,16 @@ export default function CartScreen() {
     }
 
     return (
-        <View style={{ flex: 1, padding: 20, top: 30, marginBottom: 25, backgroundColor: "#fff" }}>
-            <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>
-                Your Cart
-            </Text>
+        <View style={{ flex: 1, backgroundColor: "#F4F6F8" }}>
 
+            {/* CART ITEMS */}
             <FlatList
                 data={cartItems}
                 keyExtractor={(item) => item.id}
+                contentContainerStyle={{
+                    padding: 20,
+                    paddingBottom: 140, // space for sticky bar
+                }}
                 renderItem={({ item }) => (
                     <View
                         style={{
@@ -153,7 +151,7 @@ export default function CartScreen() {
                                 {item.title}
                             </Text>
 
-                            <Text style={{ marginTop: 4,color: "#2E7D32", marginVertical: 4 }}>
+                            <Text style={{ marginTop: 4, color: "#2E7D32", marginVertical: 4 }}>
                                 ₹{item.price} / {item.unit}
                             </Text>
 
@@ -173,7 +171,6 @@ export default function CartScreen() {
                                 <Text style={{ marginHorizontal: 12, fontWeight: "600" }}>
                                     {item.qty}
                                 </Text>
-
                                 <TouchableOpacity
                                     onPress={() => updateQuantity(item.id, 1)}
                                     style={{
@@ -192,33 +189,55 @@ export default function CartScreen() {
                 )}
             />
 
-            {/* TOTAL */}
+            {/* STICKY CHECKOUT BAR */}
             <View
                 style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    backgroundColor: "#fff",
+                    padding: 16,
                     borderTopWidth: 1,
                     borderTopColor: "#eee",
-                    paddingTop: 15,
-                    marginTop: 10,
                 }}
             >
-                <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                    Total: ₹{totalAmount}
-                </Text>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: 12,
+                    }}
+                >
+                    <Text style={{ color: "#777" }}>Total Amount</Text>
+                    <Text style={{ fontSize: 18, fontWeight: "700" }}>
+                        ₹{totalAmount}
+                    </Text>
+                </View>
+
+                <TouchableOpacity
+                    onPress={placeOrder}
+                    disabled={placingOrder}
+                    style={{
+                        backgroundColor: placingOrder ? "#9CCC9C" : "#08890fff",
+                        paddingVertical: 14,
+                        borderRadius: 10,
+                        alignItems: "center",
+                    }}
+                >
+                    <Text
+                        style={{
+                            color: "#fff",
+                            fontSize: 18,
+                            fontWeight: "600",
+                        }}
+                    >
+                        {placingOrder ? "Placing Order..." : "Place Order"}
+                    </Text>
+                </TouchableOpacity>
+
             </View>
-            <TouchableOpacity
-                onPress={placeOrder}
-                style={{
-                    backgroundColor: "#08890fff",
-                    paddingVertical: 14,
-                    borderRadius: 10,
-                    marginTop: 20,
-                    alignItems: "center",
-                }}
-            >
-                <Text style={{ color: "#fff", fontSize: 18, fontWeight: "600" }}>
-                    Place Order
-                </Text>
-            </TouchableOpacity>
         </View>
     );
 }
