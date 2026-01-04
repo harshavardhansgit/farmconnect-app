@@ -5,6 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CartScreen from "../screens/CartScreen";
 import OrderHistoryScreen from "./OrderHistoryScreen";
+import ProfileViewScreen from "./ProfileViewScreen";
 
 // Temporary placeholder screens
 function CategoriesScreen() {
@@ -66,7 +67,7 @@ export default function MainTabNavigator() {
             <Tab.Screen name="Categories" component={CategoriesScreen} />
             <Tab.Screen name="Search" component={SearchScreen} />
             <Tab.Screen name="Cart" component={CartScreen} />
-            <Tab.Screen name="Profile" component={OrderHistoryScreen} />
+            <Tab.Screen name="Profile" component={ProfileViewScreen} />
         </Tab.Navigator>
     );
 }

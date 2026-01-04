@@ -7,6 +7,7 @@ import SignupScreen from "../screens/SignupScreen";
 import MainTabNavigator from "../screens/MainTabNavigator";
 import ProductDetailsScreen from "../screens/ProductDetailsScreen";
 import OrderDetailsScreen from "../screens/OrderDetailsScreen";
+import OrderHistoryScreen from "../screens/OrderHistoryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,11 @@ export default function AppNavigator() {
                     name="OrderDetails"
                     component={OrderDetailsScreen}
                     options={{ title: "Order Details" }}
+                />
+                <Stack.Screen
+                    name="OrderHistory"
+                    component={OrderHistoryScreen}
+                    options={{ title: "Orders History" }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
