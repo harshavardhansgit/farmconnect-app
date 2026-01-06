@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function CartScreen() {
+    const navigation=useNavigation();
     const [cartItems, setCartItems] = useState([]);
-    const [placingOrder, setPlacingOrder] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -42,44 +42,6 @@ export default function CartScreen() {
         await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
     };
 
-    const placeOrder = async () => {
-        if (placingOrder) return; // prevent double tap
-
-        try {
-            setPlacingOrder(true);
-
-            const token = await AsyncStorage.getItem("token");
-
-            const response = await fetch("http://192.168.1.58:5000/orders", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    items: cartItems,
-                    total: totalAmount,
-                }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                alert(data.error || "Order failed");
-                setPlacingOrder(false);
-                return;
-            }
-
-            await AsyncStorage.removeItem("cart");
-            setCartItems([]);
-
-            alert("Order placed successfully 🎉");
-        } catch (error) {
-            alert("Something went wrong");
-        } finally {
-            setPlacingOrder(false);
-        }
-    };
     if (cartItems.length === 0) {
         return (
             <View
@@ -217,10 +179,11 @@ export default function CartScreen() {
                 </View>
 
                 <TouchableOpacity
-                    onPress={placeOrder}
-                    disabled={placingOrder}
+                    onPress={()=>navigation.navigate("Payment",{
+                        totalAmount:totalAmount,
+                    })}
                     style={{
-                        backgroundColor: placingOrder ? "#9CCC9C" : "#08890fff",
+                        backgroundColor: "#08890fff",
                         paddingVertical: 14,
                         borderRadius: 10,
                         alignItems: "center",
@@ -233,7 +196,7 @@ export default function CartScreen() {
                             fontWeight: "600",
                         }}
                     >
-                        {placingOrder ? "Placing Order..." : "Place Order"}
+                        Proceed to Payment
                     </Text>
                 </TouchableOpacity>
 

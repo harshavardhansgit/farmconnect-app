@@ -39,7 +39,6 @@ export default function MainTabNavigator() {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
-
                 tabBarStyle: {
                     height: 60,
                     backgroundColor: "#eaf4eaff",
