@@ -84,7 +84,7 @@ export default function CartScreen() {
             {/* CART ITEMS */}
             <FlatList
                 data={cartItems}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.id.toString()}
                 contentContainerStyle={{
                     padding: 20,
                     paddingBottom: 140, // space for sticky bar
@@ -180,7 +180,7 @@ export default function CartScreen() {
 
                 <TouchableOpacity
                     onPress={()=>navigation.navigate("Payment",{
-                        totalAmount:totalAmount,
+                        totalAmount,cartItems
                     })}
                     style={{
                         backgroundColor: "#08890fff",
